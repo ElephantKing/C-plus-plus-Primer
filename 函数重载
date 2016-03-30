@@ -1,0 +1,43 @@
+同一范围中的几个功能类似的同名函数，且这些函数的形式参数(个数、顺序、类型)。也就是说用同一个运算符，根据调用参数的不同，完成不同的功能。
+
+构成函数重载的条件：
+ 1.参数个数不同：
+     void func(int,int) 与 void func(int)
+     在这种情况下，要注意带有默认参数的情况，如  void func(int a,int b=0) 与 void func(int a)。这2者不构成重载，在调用时会发生二义性。
+
+	1. 
+		1. 
+			1. void func( int a , int b = 0 )
+			2.                  {
+			3.                                  cout << "1" << endl ;
+			4.                  }
+			5.                  void func (int a)
+			6.                  {
+			7.                                  cout << "2" << endl ;
+			8.                  }
+
+
+
+
+在上面代码中如果调用func(1,1),则调用成功，如果调用func(1)，则会报错。
+
+2.参数类型不同：
+     void func(int) VS void func(float)
+     
+         
+如果调用func(1),则调用第一个，
+如果调用func(1.1)则出错，
+如果采用如下调用方式：float a = 1.0; func(a);则条用成功，输出2.
+如果采用double s = 1.1;func(s);依然出错。
+
+3.const限定符，仅对类成员函数
+
+Screen s;s.func(1.1);则调用1
+const Screen s;s.func(1.1);则调用2
+4.const ：对于const等价性仅适用于非引用实参（左图），而于引用的时候，则有无const的形参函数是不同的，见右图。同样对于带有指向const类型的指针形参，与带有指向相同类型的非const对象的指针形参的函数不同。
+    
+
+5.注意事项：
+     返回值不能决定是否重载。
+
+
