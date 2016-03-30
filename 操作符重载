@@ -1,0 +1,39 @@
+
+class base {
+private:      
+        int m_b;
+};
+class A :public base {
+public:
+     A& operator=( const A& a){
+               base:: operator=( a);//调用父类的（默认的 ）赋值函数
+              m_v = a.m_v;
+               return * this;
+       }
+       A( const A& a) : base( a)//复制父类的那一部分，默认构造函数
+       {
+              
+               this->m_v = a.m_v;
+       }
+     //copy
+       A(int x=1):m_v( x){}
+     //实现连加的方式
+     方法一：//需要两个友元函数，一个负责输出A类对象的私有成员，另一个负责实现两个A的对象的相加，返回一个临时A的对象
+        friend ostream& operator<<(ostream& os, A& a){
+              os << a.m_v;
+              return os;
+       }
+       friend A operator+(const A& lhs,const A& rhs){
+              return A(lhs.m_v + rhs.m_v);
+       }
+     方法二：//需要两个成员函数，一个负责A类型转换成int型，另一个负责重载+操作符，并返回int的值即可
+        operator int() const{
+               return m_v;
+       }
+        int operator+( const A& a){
+               return m_v + a.m_v;
+       }
+private:
+        int m_v;
+
+};
