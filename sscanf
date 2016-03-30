@@ -1,0 +1,10 @@
+将一个字符串格式化到另一个字符串或者整数中
+例子：
+cha str[13];
+sscanf("12345", "%s",str);把12345拷贝到str中，并且末尾加'\0'
+sscanf("12345", "%3s",str);把123拷贝到str中，并且末尾加'\0'
+sscanf("aaaAAA","%[a-z]",str);str的值为aaa\0
+sscanf("aaaAAA","%[^a-z]",str);str的值不变，因为%[^a-z]并不匹配aaa，反而是匹配所有非小写字母，匹配失败，不再往后匹配
+sscanf("AAAaaa","%*[^a-z]%[a-z]",str);str的值为aaa\0，%*表示过滤，%*[^a-z]表示过滤掉所有非小写字母
+int k;
+sscanf("aaa123","%*[a-z]%i",&k); k =123他会匹配所有的整数,%i可以换成%d
