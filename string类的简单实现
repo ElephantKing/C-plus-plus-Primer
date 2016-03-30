@@ -1,0 +1,119 @@
+#include <iostream>
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+using namespace std;
+
+class String
+{
+public:
+friend istream& operator>>(istream&, String&);
+friend ostream& operator<<(ostream&, const String&);
+String(const char * src = NULL) ;//和默认构造函数合二为一
+String(const String& src);
+String& operator=(const String&);
+bool operator==(const String&) const;
+String operator+(const String&);//这个地方会产生奇怪的语法，但标准string也一样
+size_t size(){return strlen(str);}
+char& operator[](unsigned int);
+
+~String();
+private:
+char *str;
+};
+String::String(const char* src)
+{
+if(src == NULL)
+{
+str = new char[1];
+str[0] = '\0';
+}
+else
+{
+size_t len = strlen(src);
+str = new char[len + 1];
+assert(str != NULL);
+strcpy(str, src);
+}
+}
+
+String::String(const String& src)
+{
+int len = strlen(src.str);
+str = new char[len + 1];
+assert(str != NULL);
+strcpy(str, src.str);
+}
+
+String& String::operator=(const String& other)
+{
+if(this == &other)return *this;
+else
+{
+int len = strlen(other.str);
+str = new char[len + 1];
+assert(str != NULL);
+strcpy(str, other.str);
+return *this;
+}
+}
+
+String::~String()
+{
+delete[] str;
+}
+
+String String::operator+(const String& other)
+{
+size_t len1 = strlen(str);
+size_t len2 = strlen(other.str);
+if(len1 == 0)return other;
+else if(len2 == 0)return *this;
+else
+{
+String temp;
+temp.str = new char[len1 + len2 + 1];
+strcpy(temp.str, str);
+strcpy(temp.str + len1, other.str);
+
+return temp;
+}
+}
+
+bool String::operator==(const String& other) const
+{
+return strcmp(str, other.str) == 0;
+}
+
+char& String::operator[](unsigned int index)
+{
+assert(index>=0 && index < strlen(str));
+return *(str+index);
+}
+istream& operator>>(istream& input, String& myStr)
+{
+char temp[255];
+input>>temp;
+myStr = temp;
+return input;
+}
+ostream& operator<<(ostream& output, const String& myStr)
+{
+output<<myStr.str;
+return output;
+}
+int main()
+{
+String mystr1 = "abc";
+String mystr2 = "cg d";
+cout<<mystr1.size()<<endl;
+cout<<mystr1<<endl;
+cout<<mystr2<<endl;
+cout<<mystr1 + mystr2<<endl;
+cout<<(mystr1 + mystr2).size()<<endl;
+for(int i = 0; i < (mystr1 + mystr2).size(); ++i)
+{
+cout<<(mystr1 + mystr2)[i];
+}
+return 0;
+}
