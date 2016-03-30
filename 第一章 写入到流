@@ -1,0 +1,8 @@
+std::cout<<"Enter two numbers:"<<std::endl;
+<<操作符的左操作数为ostream，右操作数为要输出的值，
+且其返回值为其左操作数。即返回std::cout。
+同理std::cin>>a>>b;情况类似
+
+基于这个前提，可以实现链式法则。
+
+标准库头文件用尖括号<>，
