@@ -1,0 +1,24 @@
+1.返回非引用类型时
+函数返回值用于初始化在调用函数处创建的临时对象，如果返回值不是引用类型，在调用函数处的地方会将函数返回值复制给临时对象。
+          eg:
+          string make_plural(size_t ctr, const string& word
+                                                       const string & end){
+               return(ctr == 1)? word : word + ending;    
+          }
+          返回处的两种情况，都在返回的地方复制了返回的     
+          string对象。
+2.返回引用
+     当函数返回引用类型时，没有复制返回值。返回的事对象    
+          本身。
+          const string& shotrtString(const stirng& s1, const      
+
+          string & s2){
+               return s1.size()<s2.size ? s1 : s2;     
+          }
+          调用函数返回结果时，返回的事字符串本身，没有复制
+3.千万不要返回局部对象或其指针的引用
+string& home(const      string&  s)
+{
+     string ret = s;
+     return ret;
+}
