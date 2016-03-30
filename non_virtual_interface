@@ -1,0 +1,60 @@
+起先是看到了关于pure virtual 函数的继承特点：如果子类不予实现，则子类不可实例化。
+另有http://blog.sina.com.cn/s/blog_7cfb366d0101faqt.html博主精心指出pure virtual 的至尊解释，代码：
+
+class test{
+public:
+      void print();
+      virtual void order()=0;
+      int array[20];
+};
+void test::print(){
+        order();
+        printf("打印结果： ");
+        for(int i=0; i<20; i++)
+           printf("%d ", array[i]);
+}
+order函数是个排序方法，父类方法print因为根本不知道子类中的排序怎么写，所以设定成为纯虚函数。但可能会问，为何不在子类中完成打印操作？如果有n中排序方法，则可能会将print函数重复n次。
+书上说的用法：
+
+class Base{
+public:
+     void test(){
+          dosomething();
+     };
+private:
+     virtual void dosomething(){
+          cout << "Base" << endl;
+     }
+};
+
+class A :public Base{
+private:
+     virtual void dosomething(){
+          cout << "A" << endl;
+     }
+};
+class B :public Base{
+private:
+     virtual void dosomething(){
+          cout << "B" << endl;
+     }
+};
+
+
+void main(){
+     A a;
+     a.test();
+     B b;
+     b.test();
+     Base obj;
+     obj.test();
+}
+代码解释：运行之会输出 A B Base;
+倘若把Base中virtual去掉，则会输出 Base Base Base ;
+关于动态绑定和静态绑定之间的区别，参考http://blog.csdn.net/chgaowei/article/details/6427731
+
+NVI的有点在于可在做一些事之前和做一些事之后来设定好适当的场景，结束之后清理场景。事前工作包括锁定互斥器，日志记录项，验证先决条件。秘诀在于，子类需要实现欲调用的方法。
+
+
+
+
