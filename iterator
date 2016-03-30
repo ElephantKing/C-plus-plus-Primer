@@ -1,0 +1,14 @@
+vector<int> name(10,10);
+const vector<int>::iterator iter = name.begin();
+*iter = 1; // OK,change the element in name
+iter++;//error,iter is a const
+
+for(vector<int>::const_iterator iter = name.begin();iter != name.end(); ++iter)
+{
+     cout<< *iter << " ";//OK,show all element in name
+     *iter = 1;//error,can't change the value
+}
+
+任何改变vector的长度的操作都会使已经存在的迭代器失效，如调用push_back()后就不能使用之前定义过的迭代器了。
+
+vector<type>::size_type len;//这是vector<type>类型的长度，即元素个数
