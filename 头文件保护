@@ -1,0 +1,6 @@
+如果要定义头文件 xxxItem.h
+他的头文件可以需要写成这样
+#ifndef XXXITEM_H
+#define XXXITEM_H
+...
+#endif
