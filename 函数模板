@@ -1,0 +1,16 @@
+模板关键字 template <模板形参表>
+eg. 普通函数
+template <typename T1, typename T2>
+T1& print(T1& s, T2 t){s<<t<<endl;return s;}
+...
+string str = "hello world";
+print(cout, str);
+eg. inline 函数
+template<typename T> inline T min(T&, T&){....}
+
+使用类模板时，必须为模板形参显示指定实参vector<vector<int> >vec;
+eg.template<class Type> class Queue{
+     Type &front(){};
+     void push(const Type &val){};
+};
+Queue<int> qi;
