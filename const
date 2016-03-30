@@ -1,0 +1,97 @@
+一.const 的作用
+    
+No作用说明实例1定义常量，使之不被改变
+const int MAX = 10;2便于调试，区别于宏定义const常量有类型检查，即在编译阶段就能发现类型不匹配错误，
+而宏定义只单纯的做字符替换,(还没搞懂)
+3在类中可以仅通过const构成函数重载
+class A
+{
+      ...
+      void f1();
+      void f1 const();//与上一个函数构成重载
+};4作为形参修饰符，防止参数意外被修改
+void f(const int *p)
+{
+      *p = 100;//error
+       p = 0;//OK
+}5可以节省空间const定义常量从汇编的角度来看，只是给出了对应的内存地址，
+而不是象#define一样给出的是立即数，
+所以，const定义的常量在程序运行过程中只有一份拷贝，而#define定义的常量在内存中有若干个拷贝#define PI 3.14159         //常量宏
+const doulbe  Pi=3.14159;  //此时并未将Pi放入ROM中
+double i=Pi;   //此时为Pi分配内存，以后不再分配！
+double I=PI;  //编译期间进行宏替换，分配内存
+double j=Pi;  //没有内存分配
+double J=PI;  //再进行宏替换，又一次分配内存！6提高效率编译器通常不为普通const常量分配存储空间，而是将它们保存在符号表中，这使得它成为一个编译期间的常量，没有了存储与读内存的操作，使得它的效率也很高(没搞懂)
+
+二 具体使用
+定义常量
+（1）TYPE const name; && const TYPE name都定义一个常量
+int const a = 10;//如果不是在类中，必须直接初始化，
+const int a = 10;
+（2）TYPE* const p表示p指针是常量，该指针不能指向别的地方，const TYPE* p表示p指向的值不能变，p可以变
+int const *p = ...;//必须直接赋值，且之后不能指向别的地方
+*p = 10;//OK
+p = 0;//error
+
+const int *p;
+*p=0;//error
+p=q;//OK
+（3）在修饰形参的时候，仅在修饰指针或引用形参才有用，
+参数传递的时候都是传递实参的副本，所以：
+如果是指针或者引用，则相当于把实参的地址传给函数，函数如果改变此值，会影响实参
+否则相当于把实参的副本传递给函数，相当于有两份实参，原来那份实参依然不变
+如果要使用指针或引用，但又不想函数意外修改实参，则可加上const修饰
+
+（4）const修饰返回值，一般用来修饰引用，使函数返回值不能成为左值
+char &get(string &str,int i)
+{
+    return str[i];
+}
+对于上面这个函数，我们可以写出如下的代码：
+string s = "abc";
+get(s,1) = 'X';
+函数返回值变成了左值，如果想阻止这种操作，可以将函数定义为const char &get(string &str,int i);
+（5）类中的常量，必须在构造函数初始化列表中进行初始化，且此时必须自己添加构造函数，不能使用默认构造函数，因为需要初始化类中的常量
+class A
+{
+    public:
+         const int a;//此处也可以不赋值,那么必须自己写构造函数，并通过初始化列表的方式给a赋值，如果此处已经复制，则没必要使用初始化列表(也可以用，此处的值被覆盖)
+         A():a(0)
+         {
+                ...
+         } 
+         A(int b):a(b)
+         {
+                ...
+         }
+}
+（6）类的const对象，只能调用类的const函数，不能调用类的非const函数
+class A
+{
+    public:
+       void f1();
+       void f2() const;
+}
+A a;
+a.f1();//ok
+a.f2();//ok
+
+const A b;
+b.f1();//error
+b.f2();//ok
+
+且此时如把void f2() const;改为void f1() const;依然正确，通过const修饰，可以使成员函数构成重载
+
+
+（7）可以将非const对象指针传给const对象指针做参数，但是不能将const对象指针传递给非const对象指针做参数
+void cf( ccc* oc)
+{
+     ...
+}
+ccc *c = new ccc();
+cf(c);//ok
+
+const ccc d;
+cf(&d);//error
+
+如果void cf(ccc* oc)改成void cf(const  ccc* oc)则都可以 
