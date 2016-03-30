@@ -1,0 +1,45 @@
+子类对象转成父类对象，考虑两种情况：
+1.父类中有重载赋值操作符 operator=（const Derived&）
+2.上述条件不常用，而隐式地复制构造函数和赋值操作符较为常用
+
+经过测试发现：
+如子类以public继承，则可以隐式地转成父类对象
+如子类以protected 、private继承，则编译出错，无法转换成父类对象
+
+其他点：
+1.如父类将某函数定义为virtual，且子类覆盖之，子类中有无virtual，此函数继承virtual属性
+2.将类的赋值操作符设为虚函数令人混淆，不会有好处[497]
+3.不能再父类构造函数内调用虚函数（子类一般都会覆盖）：因为子类对象在构造期间会县构造父类对象，父类构造函数中调用虚函数（用户会希望此函数为子类的版本），调用的必是父类自身的版本（子类还没有完成构造，没有初始化函数地址！）。
+4.子类重载父类成员函数，则父类成员函数会被屏蔽：{局部作用域中声明的函数不会重载全局作用域中定义的函数，派生类中定义的函数亦不会重载父类的函数}
+class Base {
+public:
+        void f();
+};
+class Deriver :public Base {
+public:
+        int f( int a){};
+};
+void main(){
+
+        Deriver d;
+       d.f(); //err
+       d. Base::f(); //ok
+}
+class Base {
+public:
+        void f(){};
+        float f( float a){ return 1; };
+        float f( string a){ return 1; };
+};
+class Deriver :public Base {
+public:
+       using Base::f;
+        int f( int a){ return 2; };
+       
+};
+void main(){
+
+        Deriver d;
+       d.f();
+        float x = d.f( "asdf");//ok
+}
