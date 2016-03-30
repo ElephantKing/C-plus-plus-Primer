@@ -1,0 +1,37 @@
+1.
+void CALLBACK  g_RealDataCallBack_V30_1 ( LONG lRealHandle , DWORD dwDataType , BYTE * pBuffer , DWORD dwBufSize, void* dwUser )
+
+void CALLBACK  g_RealDataCallBack_V30_2 ( LONG lRealHandle , DWORD dwDataType , BYTE * pBuffer , DWORD dwBufSize, void* dwUser )
+
+void CALLBACK  g_RealDataCallBack_V30_3 ( LONG lRealHandle , DWORD dwDataType , BYTE * pBuffer , DWORD dwBufSize, void* dwUser )
+
+void CALLBACK  g_RealDataCallBack_V30_4 ( LONG lRealHandle , DWORD dwDataType , BYTE * pBuffer , DWORD dwBufSize, void* dwUser )
+//****************************
+//回调函数 的 函数指针数组
+//****************************
+void(CALLBACK *g_RealDataCallBack_V30[4])(LONG lRealHandle, DWORD dwDataType, BYTE *pBuffer, DWORD dwBufSize, void* dwUser) = {
+     g_RealDataCallBack_V30_0,
+     g_RealDataCallBack_V30_1,
+     g_RealDataCallBack_V30_2,
+     g_RealDataCallBack_V30_3
+
+};
+
+2.
+//****************************
+//普通函数 函数指针 数组
+//****************************
+define
+int f(int,float){return 0;}
+
+int(*ptr_f)(int , float)  =  f;
+
+int(*ptr_f_Array[3])(int , float)  = { f, f, f};
+
+ways
+
+ptr_f(1, 1.0);  (*ptr_f(1, 1.0));
+
+for(){
+     ptr_f_Array[i++](1, 1.0);
+}
