@@ -1,0 +1,8 @@
+strlen(s):     返回s的长度，不包括最后的结束符null
+strcmp(s1,s2): 个字符串是否相同，若s1 == s2,返回0；若s1>s2，则返回正数，否则返回负数
+strcat(s1,s2):将字符串s2连接到s1后面，返回s1，s1必须足够长。
+strcpy(s1,s2):将s2复制给s1，返回s1，s1必须足够长
+strncat(s1,s2,n):将s2前n个字符连接到s1后面，返回s1，s1足够长
+strncpy(s1,s2,n):将s2前n个字符复制给s1，返回s1，s1足够长
+
+string.c_str();将string对象转化为c风格字符串，且其返回值为const char类型的数组。
